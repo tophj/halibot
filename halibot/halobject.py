@@ -21,6 +21,14 @@ class HalObject():
 	def _queue_msg(self, msg):
 		self.eventloop.call_soon_threadsafe(self.receive, msg)
 
+	def _get_links(self, name):
+		if not name:
+			return []
+		links = self._hal.config.get("links",None)
+		if not links:
+			return []
+		return links.get(name, [])
+
 	def init(self):
 		pass
 

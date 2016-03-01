@@ -3,8 +3,9 @@ from .halobject import HalObject
 class HalAgent(HalObject):
 
 	def dispatch(self, msg):
-		out = self.config.get('out', self._hal.modules.keys())
-		self.send_to(msg, out)
+		# TODO: Optimize this
+		links = self._get_links("default") + self._get_links(self.config.get("name", None))
+		self.send_to(msg, links)
 
 	def connect(self, to):
 		# FIXME Don't modify the config like this?
@@ -12,4 +13,3 @@ class HalAgent(HalObject):
 			self.config['out'].append(to.name)
 		else:
 			self.config['out'] = [ to.name ]
-
