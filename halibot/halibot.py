@@ -99,13 +99,23 @@ class Halibot():
 
 	# TODO: Reload a class, and restart all modules of that class
 	def reload(self, cls):
-		pass
+		if self.agent_loader.remove(cls):
+			self.log.debug("Removed agent class '{}'".format(cls))
+			pass
+		if self.module_loader.remove(cls):
+			self.log.debug("Removed module class '{}'".format(cls))
+			obj = self.module_loader.get(cls)
+			for o in self.modules.items():
+				if o[1].__class__.__name__ == obj.__name__:
+					o[1]._shutdown()
+					conf = o[1].config
+					self.add_module_instance(o[0], obj(self, conf))
 
 	# Restart a module instance by name
 	def restart(self, name):
 		o = self.get_object(name)
 		if o:
-			o.shutdown()
+			o._shutdown()
 			o.init()
 		else:
 			self.log.warning("Failed to restart instance '{}'".format(name))

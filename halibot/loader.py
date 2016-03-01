@@ -11,9 +11,9 @@ import logging
 
 class Loader():
 
-	items = {}
 
 	def __init__(self, paths, superclass):
+		self.items = {}
 		self.paths = paths
 		self.superclass = superclass
 		self.log = logging.getLogger(self.__class__.__name__)
@@ -60,3 +60,9 @@ class Loader():
 		if not name in self.items:
 			self._load(name)
 		return self.items[name]
+
+	def remove(self, name):
+		if name in self.items:
+			self.items.pop(name)
+			return True
+		return False

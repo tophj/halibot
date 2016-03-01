@@ -14,6 +14,7 @@ class HalObject():
 		self._thread.start()
 
 	def _shutdown(self):
+		self.log.debug("Unloading module")
 		self.eventloop.call_soon_threadsafe(self.eventloop.stop)
 		self._thread.join()
 		self.shutdown()
